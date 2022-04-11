@@ -1,0 +1,181 @@
+---
+title: "limma PipeLine"
+author: "Brandon YEO"
+date: '2022-04-08'
+output:
+  md_document:
+    variant: gfm
+---
+
+Chapters 
+1. Data import and understanding of data 
+2. Data normalization and making comparison 
+3. DEGs isolation from groups 
+
+In General, the pipeline looks like this
+Step 1 - DGEList() 
+Step 2 - model.matrix()
+Step 3 - voom()
+Step 4 - lmfit()
+Step 5 - makeContrasts()  + Contrasts.fit()
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Based on #https://ucdavis-bioinformatics-training.github.io/2018-June-RNA-Seq-Workshop/thursday/DE.html
+
+# PSA, don't use single variable object name 
+```
+
+```{r}
+library(edgeR)
+library(limma)
+```
+
+# Chapter 1 Data import and Understanding of Data 
+
+```{r}
+counts <- 
+  read.delim("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2018-June-RNA-Seq-Workshop/master/thursday/all_counts.txt")
+
+head(counts)
+```
+ Create DGE object 
+```{r}
+d0 <- DGEList(counts)
+d0 <- calcNormFactors(d0)
+```
+
+Filter data on lower count rate
+```{r}
+cutoff <- 1
+drop <- which(apply(cpm(d0),1,max) < cutoff)
+d <- d0[-drop,] 
+dim(d) # number of genes left
+```
+set sample names 
+```{r}
+snames <- colnames(counts) # Sample names
+
+cultivar <- substr(snames, 1, nchar(snames) - 2) 
+time <- substr(snames, nchar(snames) - 1, nchar(snames) - 1)
+cultivar
+```
+
+```{r}
+time
+```
+
+```{r}
+group <- interaction(cultivar, time)
+group
+```
+
+```{r}
+plotMDS(d, col = as.numeric(group))
+```
+- Checking with PCA 
+  - https://www.quora.com/Whats-the-difference-between-MDS-and-PCA?share=1
+  - https://stats.stackexchange.com/questions/14002/whats-the-difference-between-principal-component-analysis-and-multidimensional
+```{r}
+library(factoextra)
+library(FactoMineR)
+
+pca.raw.d <- log2(d$counts+0.5)
+
+pca.d <- PCA(t(pca.raw.d),graph = F)
+fviz_pca_ind(pca.d, col.ind = group)
+```
+# Chapter 2 - Data Normalization and making models 
+
+- Voom Transformation and calculation of variance 
+- Transform RNA-Seq Data Ready for Linear Modelling
+
+https://www.montana.edu/rotella/documents/502/DesignMatricesR.pdf
+```{r}
+library(pheatmap)
+mm <- model.matrix(~ 0 + group)
+pheatmap(mm,cluster_rows = FALSE,cluster_cols = FALSE)
+```
+
+```{r}
+voom.y.d <- voom(d, mm, plot = T)
+```
+
+ # fitting data into lm model 
+```{r}
+fit <- lmFit(voom.y.d, mm)
+coef.fit <- fit$coefficients
+head(coef(fit))
+```
+
+# Chapter 3 - Establish sample group for DEGs analysis 
+
+```{r}
+# An example on how to use make contrast 
+x <- c("B-A","C-B","C-A")
+makeContrasts(contrasts=x,levels=c("A","B","C"))
+```
+
+ - Using Contrast and contrast fit
+```{r}
+contr <- makeContrasts(groupI5.9 - groupI5.6, levels = colnames(coef(fit)))
+contr
+```
+
+ - toptable(): Extract a table of the top-ranked genes from a linear model fit.    
+ - eBayes -  Empirical Bayes Statistics for Differential Expression
+```{r}
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+top.table <- topTable(tmp, sort.by = "P", n = Inf)
+head(top.table, 5)
+```
+
+
+```{r}
+#compared to coef 
+coef_DEG <- coef.fit[rownames(coef.fit) %in% rownames(top.table)[1:5],]
+coef_DEG[,c(5,2)]
+```
+
+```{r}
+length(which(top.table$adj.P.Val < 0.05))
+
+library(dplyr)
+DEGs <- top.table %>%  arrange(logFC) %>% filter(adj.P.Val <0.05) 
+head(DEGs)
+```
+ Export gene list to csv
+```{r}
+top.table$Gene <- rownames(top.table)
+top.table <- top.table[,c("Gene", names(top.table)[1:6])]
+write.table(top.table, file = "time9_v_time6_I5.txt", row.names = F, sep = "\t", quote = F)
+```
+
+#  Chpater 3.1  - Change Groupings
+
+```{r}
+contr <- makeContrasts(groupI5.6 - groupC.6, levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+top.table <- topTable(tmp, sort.by = "P", n = Inf)
+
+length(which(top.table$adj.P.Val < 0.05)) # number of DE genes
+
+top.table$Gene <- rownames(top.table)
+top.table <- top.table[,c("Gene", names(top.table)[1:6])]
+write.table(top.table, file = "I5_v_C_time6.txt", row.names = F, sep = "\t", quote = F)
+
+head(top.table,20)
+```
+
+```{r}
+p_data <-   top.table %>% filter(adj.P.Val < 0.05) 
+  
+p_data %>%  ggplot(aes(x=adj.P.Val,y=logFC)) + 
+  geom_text(label=rownames(p_data), size=4.0,alpha=0.7) 
+  
+
+```
+
