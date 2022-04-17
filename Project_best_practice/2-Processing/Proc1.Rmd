@@ -1,0 +1,59 @@
+---
+title: "ExampleProject"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Import Data
+```{r}
+library(readr)
+
+df <- read_csv("../1-Input/national-history.csv")
+```
+
+# Select reuired columns 
+```{r}
+library(dplyr)
+df2 <- df %>% select(date,deathIncrease,positiveIncrease)
+```
+
+# Plot out the first figure 
+```{r}
+library(ggplot2)
+p1 <- ggplot(df2,aes(x=date,y=deathIncrease)) + geom_line()
+p1
+```
+
+# Save figure1 as png
+```{r}
+ggsave(
+  "Plot1.png",
+  units = "px",
+  dpi = 300,
+  width = 1600,
+  height = 900,
+  path = "./3-Output/"
+)
+```
+
+# Plot out the second figure 
+```{r}
+p2 <- ggplot(df2,aes(x=date,y=positiveIncrease)) + geom_line()
+p2
+```
+
+# Save figure2 as png
+```{r}
+ggsave(
+  "Plot2.png",
+  units = "px",
+  dpi = 300,
+  width = 1600,
+  height = 900,
+  path = "./3-Output/"
+)
+```
+
