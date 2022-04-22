@@ -1,0 +1,57 @@
+---
+title: "vcfR tools"
+author: "LiquidBrain"
+date: "4/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#https://cran.r-project.org/web/packages/vcfR/vignettes/intro_to_vcfR.html
+```
+
+```{r}
+library(vcfR)
+pkg <- "pinfsc50"
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = pkg)
+dna_file <- system.file("extdata", "pinf_sc50.fasta", package = pkg)
+gff_file <- system.file("extdata", "pinf_sc50.gff", package = pkg)
+```
+
+```{r}
+vcf <- read.vcfR( vcf_file, verbose = FALSE )
+```
+
+```{r}
+dna <- ape::read.dna(dna_file, format = "fasta")
+gff <- read.table(gff_file, sep="\t", quote="")
+```
+
+# Create 
+```{r}
+library(vcfR)
+chrom <- create.chromR(name='Supercontig', vcf=vcf, seq=dna, ann=gff)
+```
+
+```{r}
+plot(chrom)
+```
+
+```{r}
+chrom <- masker(chrom, min_QUAL = 1, min_DP = 300, max_DP = 700, min_MQ = 59.9,  max_MQ = 60.1)
+plot(chrom)
+```
+
+```{r}
+chrom <- proc.chromR(chrom, verbose=TRUE)
+```
+
+```{r}
+chromoqc(chrom, dp.alpha=20)
+```
+
+```{r}
+chromoqc(chrom, xlim=c(5e+05, 6e+05))
+```
+
+
