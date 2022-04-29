@@ -1,0 +1,28 @@
+{
+    "id": "10AC8791",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1651152290026.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "id": "9f4362093dc54a2092e31fe56a8c605e",
+        "name": "tcga_data",
+        "title": "tcga_data",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651151880,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651152290026,
+    "read_only": false,
+    "read_only_alternatives": []
+}

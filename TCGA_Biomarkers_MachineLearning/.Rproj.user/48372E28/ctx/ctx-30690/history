@@ -1,0 +1,512 @@
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+ylim(0,200)+
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+ylim(0,100)+
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+###################################################
+library(readxl)
+df3 <- data.frame(x = seq(1,1000),
+y1 = rgamma(1000, shape = 1) *20,
+y2 = rnorm(n = 1000, mean = 20, sd = 7))
+df3 %>% ggplot() +
+theme_minimal() +
+ylim(0,100)+
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+###################################################
+library(readxl)
+df3 <- data.frame(x = seq(1,1000),
+y1 = rgamma(1000, shape = 1) *20,
+y2 = rnorm(n = 1000, mean = 20, sd = 7))
+df3 %>% ggplot() +
+theme_minimal() +
+ylim(0,100)+
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df3 <- data.frame(x = seq(1,1000),
+y1 = rgamma(n=1000, shape = 1) *20,
+y2 = rnorm(n = 1000, mean = 20, sd = 7))
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df3 <- data.frame(x = seq(1,1000),
+y1 = rgamma(n=1000, shape = 1) *20,
+y2 = rnorm(n = 100, mean = 20, sd = 7))
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+###################################################
+library(readxl)
+df3 <- data.frame(x = seq(1,1000),
+y1 = rgamma(n=1000, shape = 1) *20,
+y2 = rnorm(n = 100, mean = 20, sd = 15))
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30)
+df3 %>% ggplot() +
+theme_minimal() +
+geom_histogram(aes(x=y1),
+fill = "red",
+alpha = 0.6,
+bins =30) +
+geom_histogram(aes(x=y2),
+fill = "blue",
+alpha = 0.6,
+bins =30)
+df4 <- data.frame(x = seq(1,1000),
+y1 = rnorm(n = 100,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line(     fill = "red",
+alpha = 0.6,
+bins =30)
+df4 <- data.frame(x = seq(1,1000),
+y1 = rnorm(n = 1000,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line(fill = "red",
+alpha = 0.6,
+bins =30)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line(fill = "red",
+alpha = 0.6,
+bins =30)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line()
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth()
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal()
+###################################################
+library(gganimate)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal()
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal(y1)
+###################################################
+library(gganimate)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal(x)
+###################################################
+library(gganimate)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal(along = x)
+View(df4)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_time(along = x)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_time()
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal()
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal(along = x)
+df4 <- data.frame(x = seq(1,50),
+y1 = rnorm(n = 50,mean = 20,sd = 15))
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_smooth() +
+transition_reveal(along = y1)
+warnings()
+x
+df4$x
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+transition_reveal(along = y1)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line()+
+transition_reveal(along = y1)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line()+
+transition_reveal(along = x)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line(col="red")+
+transition_reveal(along = x)
+df4 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_line(col="red",size=2)+
+transition_reveal(along = x)
+###################################################
+df5 <- data.frame(x = seq(1,50),
+y1 = rpois(n = 50,lambda = 0.4))
+df5 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_bar(col="red",size=2)+
+transition_reveal(along = x)
+df5 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_colr(col="red",size=2)+
+transition_reveal(along = x)
+df5 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_col(col="red",size=2)+
+transition_reveal(along = x)
+df5 %>% ggplot(aes(x=x,y=y1)) +
+theme_minimal() +
+geom_col(col="red",size=2)+
+transition_reveal(along = x, keep_last = TRUE)
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+transition_reveal(Day)
+ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+transition_reveal(Day)
+ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 3) +
+transition_reveal(Day)
+###################################################
+df5 <- data.frame(x = seq(1,50),
+y1 = rnbinom(100, size = 5 , mu = 2))
+hist(df5)
+hist(df5$y1
+)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 5 , mu = 2))
+hist(df5$y1)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 5 , mu = 24))
+hist(df5$y1)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 6 , mu = 24))
+hist(df5$y1)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 10 , mu = 24))
+hist(df5$y1)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 8 , mu = 24))
+hist(df5$y1)
+###################################################
+df5 <- data.frame(x = seq(1,1000),
+y1 = rnbinom(1000, size = 7 , mu = 24))
+hist(df5$y1)
+hist(df5$y1,col = "red")
+hist(df5$y1,col = "red",breaks = 50)
+animate(anim, nframes = 120,fps = 30,renderer = "avrender")
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 3) +
+transition_reveal(Day)
+animate(anim, nframes = 120,fps = 30,renderer = "avrender")
+animate(anim, nframes = 120,fps = 30, renderer = ffmpeg_renderer())
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer())
+#animate(anim, nframes = 120,fps = 30, renderer = av_renderer(),
+magick::image_write(anim, path="myanimation.mp4")
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer())
+anim_save(filename = "line Animation")
+getwd()
+anim_save(filename = "line Animation",path = "~/Desktop/"
+)
+anim_save(filename = "line Animation",path = "F:/VideosProjects/Current Project/Negative Binomial/Linear model/")
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer())
+anim_save(filename = "lineAnimation.mp4",path = "F:/VideosProjects/Current Project/Negative Binomial/Linear model/")
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 3) +
+transition_reveal(Day)
+animate(anim, nframes = 120,fps = 30)
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/")
+anim_save("line_animation.mp4",renderer = av_renderer(),path=path)
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/")
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/"
+anim_save("line_animation.mp4",renderer = av_renderer(),path=path)
+libray(av)
+library(av)
+library(av)
+anim_save("line_animation.mp4",renderer = av_renderer(),path=path)
+animate(anim, nframes = 120,fps = 30)
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/"
+anim_save("line_animation.mp4",renderer = av_renderer(),path=path)
+anim_save("line_animation.gif",renderer = av_renderer(),path=path)
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer())
+anim_save("line_animation.mp4", renderer = av_renderer(), path=path)
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer(),width=1080,height=1080)
+anim_save("line_animation.mp4", renderer = av_renderer(), path=path)
+###################################################
+library(gganimate)
+library(av)
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line() +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 3) +
+transition_reveal(Day)
+animate(anim, nframes = 120,fps = 30, renderer = av_renderer(),width=1080,height=1080)
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/"
+anim_save("line_animation.mp4", renderer = av_renderer(), path=path)
+###################################################
+anim_save("line_animation.gof", renderer = av_renderer(), path=path)
+anim_save("line_animation.gif", renderer = av_renderer(), path=path)
+anim_save("line_animation.gif", path=path)
+animate(anim, nframes = 120,fps = 30, width=1080,height=1080)
+anim_save("line_animation.gif", path=path)
+anim_save("line_animation.gif", path=path, renderer = av_renderer())
+anim_save("line_animation.mp4", path=path, renderer = av_renderer())
+animate(anim, nframes = 120,fps = 30, width=1080,height=1080,renderer = av_renderer()
+path <-  "F:/VideosProjects/Current Project/Negative Binomial/Linear model/"
+animate(anim, nframes = 120,fps = 30, width=1080,height=1080,renderer = av_renderer())
+anim_save("line_animation.mp4", path=path, renderer = av_renderer())
+nim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line(size=3) +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 5) +
+transition_reveal(Day)
+animate(anim, nframes = 120,fps = 30, width=1080,height=1080,renderer = av_renderer())
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line(size=3) +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 5)
+ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line(size=3) +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 5)
+ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line(size=5) +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 5)
+anim <- ggplot(airquality, aes(Day, Temp, group = Month)) +
+geom_line(size=5) +
+geom_point(aes(group = seq_along(Day))) +
+geom_point(colour = 'red', size = 5) +
+transition_reveal(Day)
+animate(anim, nframes = 120,fps = 30, width=1080,height=1080,renderer = av_renderer())
+anim_save("line_animation.mp4", path=path, renderer = av_renderer())
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls())
+library("TCGAbiolinks")
+library("limma")
+library("edgeR")
+library("glmnet")
+library("factoextra")
+library("FactoMineR")
+library("caret")
+library("SummarizedExperiment")
+library("gplots")
+library("survival")
+library("survminer")
+library("RColorBrewer")
+library("gProfileR")
+library("genefilter")
+library("GenomicDataCommons")
+library("GenomeInfoDbData")
+library("ExperimentHub")
+library("AnnotationHub")
+library("keras")
+library("tensorflow")
+GDCprojects <- getGDCprojects()
+TCGAbiolinks:::getProjectSummary("TCGA-PRAD")
+query_TCGA <- GDCquery(
+project = "TCGA-PRAD",
+data.category = "Transcriptome Profiling",
+data.type = "Gene Expression Quantification",
+experimental.strategy = "RNA-Seq",
+barcode = c("TCGA-*")) # parameter enforced by GDCquery
+# https://portal.gdc.cancer.gov/projects/TCGA-PRAD
+GDCdownload(query = query_TCGA, method = "api", files.per.chunk = 100)
+tcga_data <- GDCprepare(query_TCGA,summarizedExperiment = TRUE)
+class(query_TCGA)
+sedf <- tcga_data
+geneslist <- sedf@rowRanges$gene_id
+samplelist <- sedf@colData@listData$sample
+expr <- sedf@assays@data@listData$tpm_unstrand
+rownames(expr) <- geneslist
+colnames(expr) <- sedf@colData@listData$sample
+drop <- apply(expr,1,max) < 50
+expr_filtered <- expr[!drop,]
+rm(sedf)
+library(limma)
+library(edgeR)
+#dge <- DGEList(t(expr_filtered))
+#plotMDS.default(dge,cex = 0.4,col=sedf@colData@listData$age_at_diagnosis)
+pca.gse <- PCA(t(expr_filtered),graph = FALSE)
+fviz_pca_ind(pca.gse,col.ind = tcga_data@colData@listData$age_at_diagnosis,geom = "point")
+View(expr_filtered)
+View(tcga_data)
+fviz_pca_ind(pca.gse,col.ind = tcga_data@colData@listData$shortLetterCode,geom = "point")
+fviz_pca_ind(pca.gse,col.ind = tcga_data@colData@listData$definition,geom = "point")
+fviz_pca_ind(pca.gse,col.ind = tcga_data@colData@listData$sample_type,geom = "point")
+train_label <- train_label %>% as.factor()
+train_label <- tcga_data@colData@listData$sample_type
+train_label <- train_label %>% as.factor()
+#train_label_max <- max(train_label)
+#train_label_min <- min(train_label)
+#train_label <- train_label %>% as.numeric() %>% as.matrix() %>% normalize()
+#train_label <-cut(train_label, breaks=c(-0.01, 0.25, 0.50, 0.75, 1.01), right = FALSE, labels = FALSE)
+#train_label <- train_label -1
+#table(train_label)
+dim(train_label) <- c(dim(expr_filtered)[2], 1)
+train_label <- train_label %>% copydata(5)
+normalize <- function(x)
+{
+return((x- min(x)) /(max(x)-min(x)))
+}
+copydata <- function(array,n)
+{
+for(i in 1:n){array <- rbind(array,array)}
+return(array)
+}
+train_data <- unlist(t(expr_filtered))
+train_data <- log2(train_data+0.5)
+train_data <- train_data %>% normalize()
+dim(train_data) <- dim(t(expr_filtered))
+train_data <- train_data %>% copydata(5)
+train_data <- (train_data-0.5)*2
+hist(train_data[1,])
+hist(train_data[2,])
+hist(train_data[3,])
+library(pheatmap)
+#pheatmap(train_data)
+train_label <- train_label %>% copydata(5)
+rm(model)
+NNarray <- c(1000,500,100,25)
+model <- keras_model_sequential() %>%
+layer_dense(units = NNarray[1], activation = "tanh", input_shape = dim(train_data)[2]) %>%
+layer_dense(units = NNarray[4], activation = "tanh") %>%
+layer_dense(units = dim(train_label)[2], activation = "tanh")
+View(train_label)
+train_label <- train_label -1
+train_label <- to_categorical(train_label, num_classes = 3)
+train_label <- to_categorical(train_label, num_classes = 3)
+library("TCGAbiolinks")
+library("limma")
+library("edgeR")
+library("glmnet")
+library("factoextra")
+library("FactoMineR")
+library("caret")
+library("SummarizedExperiment")
+library("gplots")
+library("survival")
+library("survminer")
+library("RColorBrewer")
+library("gProfileR")
+library("genefilter")
+library("GenomicDataCommons")
+library("GenomeInfoDbData")
+library("ExperimentHub")
+library("AnnotationHub")
+library("keras")
+library("tensorflow")
+train_label <- to_categorical(train_label, num_classes = 3)

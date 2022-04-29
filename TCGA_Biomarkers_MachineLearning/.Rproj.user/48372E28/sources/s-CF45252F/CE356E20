@@ -1,0 +1,28 @@
+{
+    "id": "CE356E20",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1651038713286.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "id": "ae128c27c9a64ae79e1f32b6e63885be",
+        "name": "sedf",
+        "title": "sedf",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 0,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651038713286,
+    "read_only": false,
+    "read_only_alternatives": []
+}

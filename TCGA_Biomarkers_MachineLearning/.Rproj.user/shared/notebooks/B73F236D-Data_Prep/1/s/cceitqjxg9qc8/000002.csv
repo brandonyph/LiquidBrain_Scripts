@@ -1,0 +1,9 @@
+"0","rm(model)"
+"2","Warning in rm(model) :"
+"2"," object 'model' not found
+"
+"0","dim(train_data)[2]"
+"1","[1]"
+"1"," 5899"
+"1","
+"

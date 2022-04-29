@@ -1,0 +1,3 @@
+"0","pca.gse <- PCA(train_data,graph = FALSE)"
+"0",""
+"0","fviz_pca_ind(pca.gse, geom = ""point"", col.ind = sedf@colData@listData[[""secondary_gleason_grade""]])"

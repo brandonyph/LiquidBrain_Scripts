@@ -1,0 +1,512 @@
+sedf <- tcga_data
+sedf <- sedf[,sedf@colData@listData$sample_type != "Metastatic"]
+sedf <- sedf[,1:550]
+geneslist <- sedf@rowRanges$gene_id
+samplelist <- sedf@colData@listData$sample
+expr <- sedf@assays@data@listData$tpm_unstrand
+rownames(expr) <- geneslist
+colnames(expr) <- sedf@colData@listData$sample
+drop <- apply(expr,1,max) < 500
+expr_filtered <- expr[!drop,]
+rm(expr)
+#rm(tcga_data)
+gc()
+sedf <- tcga_data
+sedf <- sedf[,sedf@colData@listData$sample_type != "Metastatic"]
+sedf <- sedf[,1:550]
+geneslist <- sedf@rowRanges$gene_id
+samplelist <- sedf@colData@listData$sample
+expr <- sedf@assays@data@listData$tpm_unstrand
+rownames(expr) <- geneslist
+colnames(expr) <- sedf@colData@listData$sample
+drop <- apply(expr,1,max) < 500
+expr_filtered <- expr[!drop,]
+rm(expr)
+#rm(tcga_data)
+gc()
+pca.gse <- PCA(t(expr_filtered),graph = FALSE)
+fviz_pca_ind(pca.gse,col.ind = sedf@colData@listData[["secondary_gleason_grade"]], geom = "point")
+table(sedf@colData@listData[["secondary_gleason_grade"]])
+normalize <- function(x)
+{
+return((x- min(x)) /(max(x)-min(x)))
+}
+#copydata <- function(x){
+#  y <- rbind(x,x,x,x,x)
+#  return(y)}
+train_data <- unlist(t(expr_filtered))
+train_data <- log2(train_data+0.5)
+train_data <- train_data %>% normalize()
+dim(train_data) <- dim(t(expr_filtered))
+hist(train_data[1,])
+hist(train_data[2,])
+hist(train_data[3,])
+library(pheatmap)
+#pheatmap(train_data)
+train_label <- sedf@colData@listData[["secondary_gleason_grade"]]
+train_label <- train_label %>% as.factor() %>% as.numeric()
+train_label <- train_label - 1
+dim(train_label) <- c(dim(expr_filtered)[2], 1)
+train_label <- to_categorical(train_label, num_classes = 3)
+pheatmap(train_label,cluster_cols = FALSE,cluster_rows = FALSE)
+rm(model)
+gc()
+NNarray <- c(128, 64, 32, 8)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "sigmoid",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'sgd', loss = "categorical_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+dim(train_data)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "sigmoid",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'sgd', loss = "categorical_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "sigmoid",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[3], activation = "sigmoid") %>%
+layer_dense(units = NNarray[4], activation = "sigmoid") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'sgd', loss = "categorical_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "sigmoid",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "sigmoid") %>%
+layer_dense(units = NNarray[3], activation = "sigmoid") %>%
+layer_dense(units = NNarray[4], activation = "sigmoid") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 5,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+normalize <- function(x)
+{
+return((x- min(x)) /(max(x)-min(x)))
+}
+#copydata <- function(x){
+#  y <- rbind(x,x,x,x,x)
+#  return(y)}
+train_data <- unlist(t(expr_filtered))
+train_data <- log2(train_data+0.5)
+#train_data <- train_data %>% normalize()
+dim(train_data) <- dim(t(expr_filtered))
+hist(train_data[1,])
+hist(train_data[2,])
+hist(train_data[3,])
+dim(train_data)
+library(pheatmap)
+#pheatmap(train_data)
+train_label <- sedf@colData@listData[["secondary_gleason_grade"]]
+train_label <- train_label %>% as.factor() %>% as.numeric()
+train_label <- train_label - 1
+dim(train_label) <- c(dim(expr_filtered)[2], 1)
+train_label <- to_categorical(train_label, num_classes = 3)
+pheatmap(train_label,cluster_cols = FALSE,cluster_rows = FALSE)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 5,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 20,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+sedf <- tcga_data
+sedf <- sedf[,sedf@colData@listData$sample_type != "Metastatic"]
+sedf <- sedf[,1:550]
+geneslist <- sedf@rowRanges$gene_id
+samplelist <- sedf@colData@listData$sample
+expr <- sedf@assays@data@listData$tpm_unstrand
+rownames(expr) <- geneslist
+colnames(expr) <- sedf@colData@listData$sample
+drop <- apply(expr,1,max) < 100
+expr_filtered <- expr[!drop,]
+rm(expr)
+#rm(tcga_data)
+gc()
+library(limma)
+library(edgeR)
+dge <- DGEList(t(expr_filtered))
+plotMDS.default(dge,cex = 0.4,col=tcga_data@colData@listData$sample_type)
+pca.gse <- PCA(t(expr_filtered),graph = FALSE)
+fviz_pca_ind(pca.gse,col.ind = sedf@colData@listData[["secondary_gleason_grade"]], geom = "point")
+table(sedf@colData@listData[["secondary_gleason_grade"]])
+normalize <- function(x)
+{
+return((x- min(x)) /(max(x)-min(x)))
+}
+#copydata <- function(x){
+#  y <- rbind(x,x,x,x,x)
+#  return(y)}
+train_data <- unlist(t(expr_filtered))
+train_data <- log2(train_data+0.5)
+#train_data <- train_data %>% normalize()
+dim(train_data) <- dim(t(expr_filtered))
+hist(train_data[1,])
+hist(train_data[2,])
+hist(train_data[3,])
+dim(train_data)
+library(pheatmap)
+#pheatmap(train_data)
+train_label <- sedf@colData@listData[["secondary_gleason_grade"]]
+train_label <- train_label %>% as.factor() %>% as.numeric()
+train_label <- train_label - 1
+dim(train_label) <- c(dim(expr_filtered)[2], 1)
+train_label <- to_categorical(train_label, num_classes = 3)
+pheatmap(train_label,cluster_cols = FALSE,cluster_rows = FALSE)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+sedf <- tcga_data
+sedf <- sedf[,sedf@colData@listData$sample_type != "Metastatic"]
+sedf <- sedf[,1:550]
+geneslist <- sedf@rowRanges$gene_id
+samplelist <- sedf@colData@listData$sample
+expr <- sedf@assays@data@listData$tpm_unstrand
+rownames(expr) <- geneslist
+colnames(expr) <- sedf@colData@listData$sample
+drop <- apply(expr,1,max) < 500
+expr_filtered <- expr[!drop,]
+rm(expr)
+#rm(tcga_data)
+gc()
+library(limma)
+library(edgeR)
+dge <- DGEList(t(expr_filtered))
+plotMDS.default(dge,cex = 0.4,col=tcga_data@colData@listData$sample_type)
+pca.gse <- PCA(t(expr_filtered),graph = FALSE)
+fviz_pca_ind(pca.gse,col.ind = sedf@colData@listData[["secondary_gleason_grade"]], geom = "point")
+table(sedf@colData@listData[["secondary_gleason_grade"]])
+normalize <- function(x)
+{
+return((x- min(x)) /(max(x)-min(x)))
+}
+#copydata <- function(x){
+#  y <- rbind(x,x,x,x,x)
+#  return(y)}
+train_data <- unlist(t(expr_filtered))
+train_data <- log2(train_data+0.5)
+#train_data <- train_data %>% normalize()
+dim(train_data) <- dim(t(expr_filtered))
+hist(train_data[1,])
+hist(train_data[2,])
+hist(train_data[3,])
+dim(train_data)
+library(pheatmap)
+#pheatmap(train_data)
+train_label <- sedf@colData@listData[["secondary_gleason_grade"]]
+train_label <- train_label %>% as.factor() %>% as.numeric()
+train_label <- train_label - 1
+dim(train_label) <- c(dim(expr_filtered)[2], 1)
+train_label <- to_categorical(train_label, num_classes = 3)
+pheatmap(train_label,cluster_cols = FALSE,cluster_rows = FALSE)
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+rm(model)
+NNarray <- c(1024, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "sigmoid")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 50,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 100,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+rm(model)
+NNarray <- c(2048, 512, 256, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "sigmoid")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 100,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+rm(model)
+NNarray <- c(2048, 1024, 512, 128，32）
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = NNarray[5], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "sigmoid")
+model %>% compile(optimizer = 'adam', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 100,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+rm(model)
+NNarray <- c(2048, 1024, 512, 128, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = NNarray[5], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "sigmoid")
+model %>% compile(optimizer = 'sgd', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 100,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+rm(model)
+NNarray <- c(2048, 1024, 512, 128, 32)
+model <- keras_model_sequential() %>%
+layer_dense(
+units = NNarray[1],
+activation = "relu",
+input_shape = dim(train_data)[2]
+) %>%
+layer_dense(units = NNarray[2], activation = "relu") %>%
+layer_dense(units = NNarray[3], activation = "relu") %>%
+layer_dense(units = NNarray[4], activation = "relu") %>%
+layer_dense(units = NNarray[5], activation = "relu") %>%
+layer_dense(units = dim(train_label)[2], activation = "softmax")
+model %>% compile(optimizer = 'sgd', loss = "binary_crossentropy",metrics = c('accuracy'))
+history <- model %>%
+fit(
+x = train_data,
+y = train_label,
+epochs = 100,
+use_multiprocessing = TRUE,
+batch_size = dim(train_data)[1]/10,
+#validation_split = 0.1
+)
+save_model_hdf5(model,'C:/savepath/savename.hdf5')
+model <- keras::load_model_hdf5('C:/savepath/savename.hdf5')
+dim(train_data)[2]

@@ -1,0 +1,5 @@
+"0","library(limma)"
+"0","library(edgeR)"
+"0",""
+"0","#dge <- DGEList(t(expr_filtered))"
+"0","#plotMDS.default(dge,cex = 0.4,col=tcga_data@colData@listData$sample_type)"
