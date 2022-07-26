@@ -1,0 +1,115 @@
+---
+title: "BayesianNetwork"
+author: "LiquidBrain"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+Based on: https://hameddaily.blogspot.com/2015/02/bayesian-network-in-r-introduction.html
+Ref:   https://data-flair.training/blogs/bayesian-network-in-r/
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The bnlearn package implements the following learning algorithms.
+-  Constrain-based: PC, GS, IAMB, MMPC, Hilton-PC
+-  Score-based: Hill-Climbing, Tabu Search
+-  Pairwise: ARACNE, Chow-Liu
+-  Hybrid: MMHC, RSMAX2
+
+```{r}
+library(bnlearn)
+```
+
+
+Bayesian networks (BNs) are a type of graphical model that encode the conditional probability between different learning variables in a directed acyclic graph. 
+
+There are benefits to using BNs compared to other unsupervised machine learning techniques. A few of these benefits are:
+
+It is easy to exploit expert knowledge in BN models. 
+BN models have been found to be very robust in the sense of 
+  
+  i) noisy data, 
+  ii) missing data and 
+  iii) sparse data. 
+
+Unlike many machine learning models (including Artificial Neural Network), which usually appear as a “black box,” all the parameters in BNs have an understandable semantic interpretation. 
+
+```{r}
+asia<- bnlearn::asia
+```
+
+-  D (dyspnoea), a two-level factor with levels yes and no.
+-  T (tuberculosis), a two-level factor with levels yes and no.
+-  L (lung cancer), a two-level factor with levels yes and no.
+-  B (bronchitis), a two-level factor with levels yes and no.
+-  A (visit to Asia), a two-level factor with levels yes and no.
+-  S (smoking), a two-level factor with levels yes and no.
+-  X (chest X-ray), a two-level factor with levels yes and no.
+-  E (tuberculosis versus lung cancer/bronchitis), a two-level factor with levels yes and no.
+
+```{r}
+colnames(asia) <- c("VisittoAsia","Smoking","Tuberculosis","LungCancer","Bronchitis", "TuberculosisCersusLungCancer_Bronchitis",
+                      "ChestXray","Dyspnoea")
+
+bn_df <- data.frame(asia)
+res <- hc(bn_df)
+plot(res)
+```
+
+
+```{r}
+res = model2network("[VisittoAsia][Smoking][Tuberculosis|VisittoAsia][LungCancer|Smoking][Bronchitis|Smoking][Dyspnoea|Bronchitis:TuberculosisCersusLungCancer_Bronchitis][TuberculosisCersusLungCancer_Bronchitis|Tuberculosis:LungCancer][ChestXray|TuberculosisCersusLungCancer_Bronchitis]")
+
+#res <- hc(bn_df)
+plot(res)
+```
+
+
+```{r}
+fittedbn <- bn.fit(res, data = bn_df)
+
+graphviz.chart(
+  fittedbn,
+  type = "barprob" ,
+  layout = "fdp",
+  scale = c(0.75, 0.9),
+  grid = TRUE,
+  bar.col = "red",
+  strip.bg = "lightskyblue"
+)
+
+```
+
+“Shortness-of-breath (dyspnoea) may be due to tuberculosis, lung cancer or bronchitis, or none of them, or more than one of them. A recent visit to Asia increases the chances of tuberculosis, while smoking is known to be a risk factor for both lung cancer and bronchitis. The results of a single chest X-ray do not discriminate between lung cancer and tuberculosis, as neither does the presence or absence of dyspnoea.”
+
+Standard learning algorithms are not able to recover the true structure of the network because of the presence of a node (E) with conditional probabilities equal to both 0 and 1. Monte Carlo tests seems to behave better than their parametric counterparts.
+
+```{r}
+fittedbn <- bn.fit(res, data = bn_df)
+
+print(fittedbn$Tuberculosis)
+```
+
+
+```{r}
+print(fittedbn$TuberculosisCersusLungCancer_Bronchitis)
+```
+
+```{r}
+cpquery(fittedbn, event = (Smoking=="yes"), evidence = (Bronchitis=="no"))
+```
+
+
+```{r}
+cpquery(fittedbn, event = (Smoking=="yes"), evidence = (Bronchitis=="yes"))
+```
+
+```{r}
+cpquery(fittedbn, event = (Tuberculosis=="yes"), evidence = (Dyspnoea=="yes"))
+cpquery(fittedbn, event = (Tuberculosis=="no"), evidence = (Dyspnoea=="yes"))
+```
+
+
+

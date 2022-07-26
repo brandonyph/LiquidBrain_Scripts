@@ -1,0 +1,85 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+---
+
+# 1. Importing libraries 
+```{r}
+start_time <- Sys.time()
+
+library(dplyr)
+library(Seurat)
+library(patchwork)
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+# 2. Importing Data
+```{r}
+start_time <- Sys.time()
+
+pbmc.data <- Read10X(data.dir = "c:/Users/brand/OneDrive/Desktop/Files/SeuratvsScanpy/data/hg19/")
+pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3, min.features = 200)
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+# 3. Filtering data
+```{r}
+start_time <- Sys.time()
+
+pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt")
+FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 )
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+# 4. Normalise, log10, and scale data 
+```{r}
+start_time <- Sys.time()
+
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+
+all.genes <- rownames(pbmc)
+pbmc <- ScaleData(pbmc, features = all.genes)
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
+# 5. Run PCA and UMAP 
+
+```{r}
+start_time <- Sys.time()
+
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+pbmc <- FindNeighbors(pbmc, dims = 1:10)
+pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc <- RunUMAP(pbmc, dims = 1:10)
+DimPlot(pbmc, reduction = "umap")
+
+end_time <- Sys.time()
+end_time - start_time
+
+```
+
+# 6. Find Markers 
+```{r}
+start_time <- Sys.time()
+
+pbmc.markers <- FindAllMarkers(pbmc, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25, test.use = "t")
+VlnPlot(pbmc, features = c("MS4A1", "CD79A"))
+
+end_time <- Sys.time()
+end_time - start_time
+```
+
