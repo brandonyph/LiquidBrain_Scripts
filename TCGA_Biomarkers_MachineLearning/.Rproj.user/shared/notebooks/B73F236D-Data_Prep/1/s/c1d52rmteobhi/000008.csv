@@ -1,5 +1,0 @@
-"0","  top_nodes <- as.data.frame(total_weights_bias[total_weights_bias[,2] > 1, ])
-"
-"2","Error in h(simpleError(msg, call)) : 
-  error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'total_weights_bias' not found
-"

@@ -1,2 +1,0 @@
-"0","ego_BP_df <- ego_BP@result"
-"0","write.csv(ego_BP_df, file= ""../Output/ego_BP_df.csv"")"

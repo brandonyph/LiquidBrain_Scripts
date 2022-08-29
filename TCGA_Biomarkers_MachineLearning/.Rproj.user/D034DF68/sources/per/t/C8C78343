@@ -1,0 +1,27 @@
+{
+    "id": "C8C78343",
+    "path": "~/GitHub/LiquidBrain_Scripts/TCGA_Biomarkers_MachineLearning/Processing/Data_Prep.Rmd",
+    "project_path": "Processing/Data_Prep.Rmd",
+    "type": "r_markdown",
+    "hash": "1494153839",
+    "contents": "",
+    "dirty": false,
+    "created": 1660917716214.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "182,3",
+        "scrollLine": "170",
+        "last_setup_crc32": "617B967B375128e7"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1657022715,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1660919118172,
+    "read_only": false,
+    "read_only_alternatives": []
+}
